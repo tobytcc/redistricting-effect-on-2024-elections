@@ -20,7 +20,7 @@ However, there is a wealth of evidence to suggest that state lines are often dra
 
 The most notable example of gerrymandering occurred in 2010, when Republicans donated $30M into "[Project REDMAP](https://www.redistrictingmajorityproject.com/) (Redistricting Majority Project)", pouring large amounts of political funding into winning statewide elections in light-blue swing states with majority Democrat-voting citizens, before severely gerrymandering 10 states in the 2011 redistricting cycle, winning the 2012 US House elections by 33 seats while losing the nationwide popular vote ([The Atlantic](https://www.theatlantic.com/politics/archive/2017/06/how-deep-blue-maryland-shows-redistricting-is-broken/531492/)). (More info + quotes can be found in this interesting article: [tecznotes](http://mike.teczno.com/notes/redistricting.html))
 
-![Examples of heavily-gerrymandered states due to REDMAP](img\gerrymandering_examples.png)
+![Examples of heavily-gerrymandered states due to REDMAP](img/gerrymandering_examples.png)
 
 All eligible states redistricted in the 2021 redistricting cycle ([FiveThirtyEight](https://projects.fivethirtyeight.com/redistricting-2022-maps/)). At least 16 states, including states with legislatures held by both parties, saw legal challenge to their originally proposed redistricting maps ([All About Redistricting](https://redistricting.lls.edu/national-overview/?colorby=Court%20Action&level=Congress&cycle=2020)). Many states are still in litigation process just months before the 2024 presidential elections, showing how abundant and hotly-contested gerrymandering practices are across both parties, as well as how effective gerrymandering is in winning votes through an unconstitutional fashion. **The redistricting effort in 2021 may lead to large changes in expected voting performance from each state - this is what this project aims to quantify.**
 
@@ -39,7 +39,7 @@ A common technique used in determining the extent of partisan gerrymandering is 
 
 A completely balanced map should have a zero efficiency gap, with an example 0.20 efficiency gap meaning the winning party won 20% more seats than the voting results would have suggested.
 
-![Using efficiency gap to determine gerrymandering](img\bidirectional_efficiency_gap_histogram.png)
+![Using efficiency gap to determine gerrymandering](img/bidirectional_efficiency_gap_histogram.png)
 
 This article provides a visual interpretation of the efficiency gap metric: [tecznotes](http://mike.teczno.com/notes/redistricting/measuring-efficiency-gap.html)
 
@@ -53,7 +53,7 @@ Our goal is to train a convolutional neural network (CNN) to predict the margin 
 
 3. Turn maps into standardized pictures - features should be geoencoded into maps.
 
-![Sample picture for CNN training](img\sample_input_img.png)
+![Sample picture for CNN training](img/sample_input_img.png)
 
 4. Train a convolutional neural network (CNN) with MSE as our loss function - goal is to predict efficiency gaps.
 
