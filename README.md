@@ -58,6 +58,7 @@ Our goal is to train a convolutional neural network (CNN) to predict the margin 
 
 ## Data Sources
 - State Legislative Election Returns, 1948-2016: [Princeton Gerrymandering Project](https://gerrymander.princeton.edu/resources/)
+
 **Note: This dataset is sometimes incorrectly cited by many sources, and an alternative is often cited: [Harvard Dataverse (Carl Klarner)](https://dataverse.harvard.edu/dataset.xhtml?persistentId=doi:10.7910/DVN/3WZFK9)**
 
 - United States Congressional District Shapefiles, 1789-2017: [UCLA - Jeffrey B. Lewis, Brandon DeVine, and Lincoln Pritcher with Kenneth C. Martis](https://cdmaps.polisci.ucla.edu/)
