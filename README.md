@@ -57,18 +57,17 @@ Our goal is to train a convolutional neural network (CNN) to predict the margin 
 
 
 ## Data Sources
-- State Legislative Election Returns, 1948-2016: [Princeton Gerrymandering Project](https://gerrymander.princeton.edu/resources/)
-
-**Note: This dataset is sometimes incorrectly cited by many sources, and an alternative is often cited: [Harvard Dataverse (Carl Klarner)](https://dataverse.harvard.edu/dataset.xhtml?persistentId=doi:10.7910/DVN/3WZFK9)**
+- State Legislative Election Returns, 1948-2016: [Princeton Gerrymandering Project](https://gerrymander.princeton.edu/resources/) *(Note: This dataset is sometimes incorrectly cited by many sources, and an alternative is often cited: [Harvard Dataverse (Carl Klarner)](https://dataverse.harvard.edu/dataset.xhtml?persistentId=doi:10.7910/DVN/3WZFK9))*
 
 - United States Congressional District Shapefiles, 1789-2017: [UCLA - Jeffrey B. Lewis, Brandon DeVine, and Lincoln Pritcher with Kenneth C. Martis](https://cdmaps.polisci.ucla.edu/)
 
+- United States Congressional District Shapefiles, 2024: [U.S. Department of Transportation](https://geodata.bts.gov/datasets/8ef43e55f7524f02a0ecb3dd415caf33/explore?location=33.644581%2C163.934541%2C1.85)
 
-
+- United States Historical City Populations, 1790-2010: [Stanford Spatial History Project - Erik Steiner, Jason A. Heppler](https://github.com/cestastanford/historical-us-city-populations/tree/master)
 
 ## Future Improvements
 - Data quality for election data by congressional districts are surprisingly poor. I have tried my best to source accurate data. A more concerted effort through an effort of web scraping/data sourcing may yield more accurate results.
 
 - Other (more advanced) metrics have been created for to quantify partisan gerrymandering from legal ([Stanford Law Review](https://www.stanfordlawreview.org/print/article/three-tests-for-practical-evaluation-of-partisan-gerrymandering/)) and statistical ([Wang, 2016](https://web.math.princeton.edu/~sswang/wang16_ElectionLawJournal_gerrymandering-MD-WI_.pdf), [Princeton Gerrymandering Project](https://gerrymander.princeton.edu/)) standpoints. These metrics may be used to substitute/complement the efficiency gap metric in measuring how and to what extent gerrymandering plays a part in presidential elections.
 
-- There have been attempts (e.g. [BDistricting](https://bdistricting.com/2010/)) to create more equal redistricting maps that aim to reduce gerrymandering - we can take hypothetical districts and further improve our model (and create a larger sample size)
+- There have been attempts (e.g. [BDistricting](https://bdistricting.com/2010/)) to create more equal (or [hilarious](https://fakeisthenewreal.org/random-states-of-america/)) redistricting maps that aim to reduce gerrymandering - we can take hypothetical districts and further improve our model (and create a larger sample size)
