@@ -27,7 +27,7 @@ This short video explains gerrymandering in greater detail: [Vox](https://www.yo
 
 ## Methodology
 
-#### Partisan Gerrymandering Metric - Efficiency Gap
+### Partisan Gerrymandering Metric - Efficiency Gap
 
 As data mapping and analytical methods have improved over the years, there have been efforts by many organization to devise metrics and strategies to value the extent of gerrymandering from both parties.
 
@@ -39,7 +39,7 @@ A completely balanced map should have a zero efficiency gap, with an example 0.2
 
 This article provides a visual interpretation of the efficiency gap metric: [tecznotes](http://mike.teczno.com/notes/redistricting/measuring-efficiency-gap.html)
 
-#### Analytical Plan
+### Analytical Plan
 
 Our goal is to train a convolutional neural network (CNN) to predict the margin of efficiency gap for counties displaying potential signs of gerrymandering by looking at pictures of districts. We can train it on historical data by matching Voting Returns with Congressional District Maps.
 
@@ -60,7 +60,8 @@ Our goal is to train a convolutional neural network (CNN) to predict the margin 
 - State Legislative Election Returns, 1948-2016: [Princeton Gerrymandering Project](https://gerrymander.princeton.edu/resources/)
 **Note: This dataset is sometimes incorrectly cited by many sources, and an alternative is often cited: [Harvard Dataverse (Carl Klarner)](https://dataverse.harvard.edu/dataset.xhtml?persistentId=doi:10.7910/DVN/3WZFK9)**
 
-- Precinct Shapes and Vote Results for Historical US Elections: [Nathaniel V. KELSO - election-geodata](https://github.com/nvkelso/election-geodata?tab=readme-ov-file)
+- United States Congressional District Shapefiles, 1789-2017: [UCLA - Jeffrey B. Lewis, Brandon DeVine, and Lincoln Pritcher with Kenneth C. Martis](https://cdmaps.polisci.ucla.edu/)
+
 
 
 
@@ -68,3 +69,5 @@ Our goal is to train a convolutional neural network (CNN) to predict the margin 
 - Data quality for election data by congressional districts are surprisingly poor. I have tried my best to source accurate data. A more concerted effort through an effort of web scraping/data sourcing may yield more accurate results.
 
 - Other (more advanced) metrics have been created for to quantify partisan gerrymandering from legal ([Stanford Law Review](https://www.stanfordlawreview.org/print/article/three-tests-for-practical-evaluation-of-partisan-gerrymandering/)) and statistical ([Wang, 2016](https://web.math.princeton.edu/~sswang/wang16_ElectionLawJournal_gerrymandering-MD-WI_.pdf), [Princeton Gerrymandering Project](https://gerrymander.princeton.edu/)) standpoints. These metrics may be used to substitute/complement the efficiency gap metric in measuring how and to what extent gerrymandering plays a part in presidential elections.
+
+- There have been attempts (e.g. [BDistricting](https://bdistricting.com/2010/)) to create more equal redistricting maps that aim to reduce gerrymandering - we can take hypothetical districts and further improve our model (and create a larger sample size)
