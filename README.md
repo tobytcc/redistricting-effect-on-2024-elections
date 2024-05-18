@@ -47,13 +47,13 @@ This article provides a visual interpretation of the efficiency gap metric: [tec
 
 Our goal is to train a convolutional neural network (CNN) to predict the margin of efficiency gap for counties displaying potential signs of gerrymandering by looking at pictures of districts. We can train it on historical data by matching Voting Returns with Congressional District Maps.
 
-1. Calculate efficiency gaps for previous statewide local election returns - this will serve as our target feature. (Code)[metric_preprocessing.ipynb]
+1. Calculate efficiency gaps for previous statewide local election returns - this will serve as our target feature. [Code](metric_preprocessing.ipynb)
 
-2. Match maps to election return data for each district. (Code - Heading Step 2)[map_preprocessing.ipynb]
+2. Match maps to election return data for each district. [Code - Heading Step 2](map_preprocessing.ipynb)
 
-3. Turn maps into standardized pictures - features should be geoencoded into maps. (Code - Heading Step 3)[map_preprocessing.ipynb]
+3. Turn maps into standardized pictures - features should be geoencoded into maps. [Code - Heading Step 3](map_preprocessing.ipynb)
 
-![Example CNN Input Map](img\example_cnn_image.png)
+![Example CNN Input Map](img/example_cnn_image.png)
 
 4. Train a convolutional neural network (CNN) with MSE as our loss function - goal is to predict efficiency gaps.
 
