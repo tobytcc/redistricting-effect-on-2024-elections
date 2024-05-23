@@ -6,9 +6,11 @@
 
 All 50 states redrew congressional voting districts in 2021. How will nationwide redistricting efforts affect the presidential election in 2024? 
 
+[Project Final Presentation](MLPA_Final_Project_Presentation_Toby_Chiu.pptx)
+
 ## Technical Goal
 
-Predicting gerrymandering metrics by applying a convolutional neural network (CNN) on redistricted congressional district maps to evaluate the presence of gerrymandering across all districts.
+Predicting gerrymandering outcomes by applying a convolutional neural network (CNN) on redistricted congressional district maps to evaluate the presence of gerrymandering across all districts.
 
 ## Introduction
 
@@ -53,9 +55,9 @@ Our goal is to train a convolutional neural network (CNN) to predict the margin 
 
 3. Turn maps into standardized pictures - features should be geoencoded into maps. [Code - Heading Step 3](map_preprocessing.ipynb)
 
-4. Train a classification convolutional neural network (CNN) with accuracy as our primary loss function - goal is to predict presence of gerrymandering. [Code](model.ipynb)
+4. Train a classification convolutional neural network (CNN) with accuracy as our primary loss function - goal is to predict presence of gerrymandering. [Code - Heading Step 4](model.ipynb)
 
-5. Correct for underfitting/overfitting by tuning model.
+5. Correct for underfitting/overfitting by tuning model.  [Code - Heading Step 5](model.ipynb)
 
 6. Make predictions on updated maps of 2024 districts. [Code](predictions.ipynb)
 
@@ -75,7 +77,7 @@ CNNs also inherently assume that the input data:
 We are aiming to build a multiclass convolutional neural network (CNN) to be able to capture whether a given map belongs to one of three classes: 
 
 - (R) "Gerrymander for Republicans" - swing >= 0.05
-- (NC) "No Change" - -0.05 > swing < 0.05
+- (NC) "No Change" - -0.05 < swing < 0.05
 - (D) "Gerrymander for Democrats" - -0.05 <= swing
 
 We will use accuracy as our primary metric in understanding what proportion of the model's predictions is accurate. If we see high class imbalances, we will instead focus on using precision and recall to understand how well our model performs.
@@ -107,27 +109,29 @@ Instead, we can choose to oversample from minority classes (ideally with augment
 4. We can perform regularization on overfitted data by introducing dropout layers to ensure our model is more generalizable, and introduce early stopping to prevent our data from learning too much from training data.
 
 #### Underfitting
-If we encounter underfitting, we will increase the complexity of our model.
+If we encounter underfitting (low train/test accuracy), we will increase the complexity of our model.
 
 #### Overfitting
-If we encounter overfitting (generally when training error is much lower than test error), we can introduce dropout layers to randomly mask nodes during training to prevent the output from overlearning noise within training data, as well as early stopping when training error diverges from testing error to stop the output from learning specific trends only in training data.
+If we encounter overfitting (large divergence between train and test accuracy), we can introduce dropout layers to randomly mask nodes during training to prevent the output from overlearning noise within training data, as well as early stopping when training error diverges from testing error to stop the output from learning specific trends only in training data.
 
 
 ## Results
 All of our results followed the same trends as this graph (showing metrics during training over epochs):
 ![model_2.png](img/model_2_output.png)
 
-Accuracy scores tended to hover around 33% (essentially random guessing with 1/3 chance), and our precision and recall scores plummeted almost immediately (indicating our model being unable to guess right from wrong).
+The best model was our baseline model (34.4% accuracy). Accuracy scores tended to hover around 33% for all models (essentially random guessing with 1/3 chance), and our precision and recall scores plummeted almost immediately (indicating our model being unable to guess right from wrong).
 
 Our performance did not improve over epochs, overall suggesting **heavy underfitting** (despite increasing the complexity of our model + trying different types of improvements to our model architecture/parameters). It is most likely a mixture of non-ideal model architecture, untuned hyperparameters, and a very difficult task (particularly on my local machine). 
 
-Our model predicted **36 Democratic gerrymandered states**, **7 states with no change**, and **0 Republican gerrymandered states** for the 2021 redistricting case; this would theoretically indicate a landslide win for Biden (by at least 72 votes if every gerrymandered state flipped 1 state), which would obviously be untrue. This is a sign of a poor-performing model - all 3 probabilities from softmax are incredibly close, indicating a difficulty in seperating between all 3 classes.
+Unfortunately, the last model took several hours to train - my local machine cannot handle more complex parameters/architectures. To further improve on my model, I would either have to improve my map qualities (with better/more holistic data) or to train more complex models (using cloud computing).
+
+Our model predicted **42 Democratic gerrymandered states**, **1 states with no change**, and **0 Republican gerrymandered states** for the 2021 redistricting case; this would theoretically indicate a landslide win for Biden (by at least 84 votes if every gerrymandered state flipped 1 state), which would obviously be untrue. There also exists some bias within the model to prefer Democratic gerrymandering - some tuning of the maps might fix this. This is a sign of a poor-performing model - all 3 probabilities from softmax are incredibly close, indicating a difficulty in seperating between all 3 classes.
 
 ### Takeaways
 There are some takeaways/findings from the experience:
 1. **None of the parameters does not seem to matter.** The models seem to pick up on red herrings/other patterns and are unable to capture the nuance behind gerrymandering, despite introducing more complexity into the model (as much as my local machine can take - cloud computing would help in this regard.)
-2. Training on nuanced trends within maps may be **incredibly difficult for a CNN** - it may require more complex types of convolution models to pick up necessary 
-3. My **sample size is too small, despite image augmentation.** This makes it easy to overfit across the small sample size (my models did not get to this stage regularly - I could not fit my model to any trends in the maps). To improve this, we would require either fake maps that have calculated voting (which may differ to real life), or to get maps that go further back in time.
+2. Training on nuanced trends within maps may be **incredibly difficult for a CNN** - it may require more complex types of convolution models to pick up necessary trends, or to introduce higher-quality maps that show gerrymandering trends more effectively (currently available data does not allow for this).
+3. My **sample size is too small, despite image augmentation.** This makes it easy to overfit across the small sample size (my models did not get to this stage regularly - I could not fit my model to any trends in the maps). To improve this, we would require either hypothetical maps that have calculated voting (which may differ to real life), or to get maps that go further back in time.
 
 
 ## Data Sources
