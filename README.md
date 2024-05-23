@@ -55,14 +55,22 @@ Our goal is to train a convolutional neural network (CNN) to predict the margin 
 
 ![Example CNN Input Map](img/example_cnn_image.png)
 
-4. Train a classification convolutional neural network (CNN) with accuracy as our primary loss function - goal is to predict presence of gerrymandering.
+4. Train a classification convolutional neural network (CNN) with accuracy as our primary loss function - goal is to predict presence of gerrymandering. [Code](model.ipynb)
 
-5. Make predictions on updated maps of 2024 districts.
+5. Make predictions on updated maps of 2024 districts. [Code](predictions.ipynb)
 
 6. Calculate expected swings to find how the 2024 US Presidential Elections will be affected by gerrymandering. 
 
 ### Assumptions
+Our model trains using data from statewide elections (for the House of Representatives) as opposed to presidential elections. A large assumption is that these statewide election patterns transfer over to presidential elections - [not necessarily true but close enough](http://mike.teczno.com/notes/redistricting/measuring-efficiency-gap.html).
 
+Another assumption we have taken is that gerrymandering patterns are roughly constant over time. Although this is not true (Democrats started heavily gerrymandering around the late 20th century, evening the gap between both parties), the gap is relatively negligent and can be ignored for our study.
+
+![gerrymandering_over_time](img/avg_gerrymander_over_time.png)
+
+CNNs also inherently assume that the input data:
+1. contains a spatial hierarchy (the data contains a hierarchy or “levels” that determine patterns of increasing granularity)
+2. is translation-invariant (patterns can be detected even if the underlying data is found in another image/another part of the same image) - this also means that the distribution of data should be roughly stationary over time
 
 ### Model Approach
 We are aiming to build a multiclass convolutional neural network (CNN) to be able to capture whether a given map belongs to one of three classes: 
@@ -114,6 +122,8 @@ Accuracy scores tended to hover around 33% (essentially random guessing with 1/3
 
 Our performance did not improve over epochs, overall suggesting **heavy underfitting** (despite increasing the complexity of our model + trying different types of improvements to our model architecture/parameters). It is most likely a mixture of non-ideal model architecture, untuned hyperparameters, and a very difficult task (particularly on my local machine). 
 
+Our model predicted **36 Democratic gerrymandered states** and **7 states with no change** for the 2021 redistricting case - this is a sign of a poor-performing model - all 3 probabilities from softmax are incredibly close, indicating a difficulty in seperating between all 3 classes.
+
 ### Takeaways
 There are some takeaways/findings from the experience:
 1. **None of the parameters does not seem to matter.** The models seem to pick up on red herrings/other patterns and are unable to capture the nuance behind gerrymandering, despite introducing more complexity into the model (as much as my local machine can take - cloud computing would help in this regard.)
@@ -126,9 +136,7 @@ There are some takeaways/findings from the experience:
 
 - United States Congressional District Shapefiles, 1789-2017: [UCLA - Jeffrey B. Lewis, Brandon DeVine, and Lincoln Pritcher with Kenneth C. Martis](https://cdmaps.polisci.ucla.edu/)
 
-- United States Congressional District Shapefiles, 2024: [U.S. Department of Transportation](https://geodata.bts.gov/datasets/8ef43e55f7524f02a0ecb3dd415caf33/explore?location=33.644581%2C163.934541%2C1.85)
-
-- United States Congressional District Shapefiles, 2020: [Daily Kos](https://docs.google.com/spreadsheets/d/1LrBXlqrtSZwyYOkpEEXFwQggvtR0bHHTxs9kq4kjOjw/edit#gid=0)
+- United States Congressional District Shapefiles, 2020, 2024: [Daily Kos](https://docs.google.com/spreadsheets/d/1LrBXlqrtSZwyYOkpEEXFwQggvtR0bHHTxs9kq4kjOjw/edit#gid=0)
 
 - United States Historical City Populations, 1790-2010: [Stanford Spatial History Project - Erik Steiner, Jason A. Heppler](https://github.com/cestastanford/historical-us-city-populations/tree/master)
 
