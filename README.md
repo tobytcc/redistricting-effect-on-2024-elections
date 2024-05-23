@@ -8,7 +8,7 @@ All 50 states redrew congressional voting districts in 2021. How will nationwide
 
 ## Technical Goal
 
-Predicting gerrymandering metrics by applying a convolutional neural network (CNN) on redistricted congressional district maps to evaluate the extent of gerrymandering across all districts.
+Predicting gerrymandering metrics by applying a convolutional neural network (CNN) on redistricted congressional district maps to evaluate the presence of gerrymandering across all districts.
 
 ## Introduction
 
@@ -16,7 +16,7 @@ The US votes on presidential elections through a system known as the electoral c
 
 Every ten years, state representatives redraw voting district lines to keep district populations representative of the makeup of actual voters within each district. The federal government mandates that redistricting is done to with equal state legislative representation for all citizens, without discrimination on the basis of race or ethnicity ([Ballotpedia](https://ballotpedia.org/Redistricting) - more info included in link).
 
-However, there is a wealth of evidence to suggest that state lines are often drawn to favor voting outcomes for a party through various techniques, often known as **"Gerrymandering"** ([Brennan Center](https://www.brennancenter.org/our-work/research-reports/gerrymandering-explained)). The [Voting Rights Act of 1965](https://www.archives.gov/milestone-documents/voting-rights-act?_ga=2.99238622.1949216050.1715659324-971477195.1715659323) effectively banned gerrymandering on the basis of reducing the voting power of racial minorities. However, many states  bypass this issue by redrawing districts directly based on voting preferences, which often lie closely with racial, socioeconomic, or ethnic makeups across states. [Amos, Gerontakis, and McDonald (2023)](https://esra-conference.org/files/election-science-conference/files/changing_precinct_boundaries_esra-brianamos.pdf) conducted extensive analysis to find that gerrymandered districts often contained more minorities after redistricting on average (a common symptom of "packing" - a gerrymandering tactic), which often led to lower voting turnout than expected.
+However, there is a wealth of evidence to suggest that state lines are often drawn to favor voting outcomes for a party through various techniques, often known as **"Gerrymandering"** ([Brennan Center](https://www.brennancenter.org/our-work/research-reports/gerrymandering-explained)). The [Voting Rights Act of 1965](https://www.archives.gov/milestone-documents/voting-rights-act?_ga=2.99238622.1949216050.1715659324-971477195.1715659323) effectively banned gerrymandering on the basis of reducing the voting power of racial minorities. However, many states  bypass this issue by redrawing districts directly based on voting preferences, which often lie closely with racial, socioeconomic, or ethnic makeups across states. [Amos, Gerontakis, and McDonald (2023)](https://esra-conference.org/files/election-science-conference/files/changing_precinct_boundaries_esra-brianamos.pdf) conducted extensive analysis to find that gerrymandered districts often contained more minorities after redistricting on average (a common symptom of "packing" - a gerrymandering tactic), which often led to lower voting turnout than expected. (A recent Supreme Court case found this to be true in Alabama - info [here](https://www.youtube.com/watch?v=_y_CCiwKzQw&ab_channel=Vox)).
 
 The most notable example of gerrymandering occurred in 2010, when Republicans donated $30M into "[Project REDMAP](https://www.redistrictingmajorityproject.com/) (Redistricting Majority Project)", pouring large amounts of political funding into winning statewide elections in light-blue swing states with majority Democrat-voting citizens, before severely gerrymandering 10 states in the 2011 redistricting cycle, winning the 2012 US House elections by 33 seats while losing the nationwide popular vote ([The Atlantic](https://www.theatlantic.com/politics/archive/2017/06/how-deep-blue-maryland-shows-redistricting-is-broken/531492/)). (More info + quotes can be found in this interesting article: [tecznotes](http://mike.teczno.com/notes/redistricting.html))
 
@@ -55,11 +55,70 @@ Our goal is to train a convolutional neural network (CNN) to predict the margin 
 
 ![Example CNN Input Map](img/example_cnn_image.png)
 
-4. Train a convolutional neural network (CNN) with MSE as our loss function - goal is to predict efficiency gaps.
+4. Train a classification convolutional neural network (CNN) with accuracy as our primary loss function - goal is to predict presence of gerrymandering.
 
-5. Make predictions on updated maps of 2024 districts .
+5. Make predictions on updated maps of 2024 districts.
 
 6. Calculate expected swings to find how the 2024 US Presidential Elections will be affected by gerrymandering. 
+
+### Assumptions
+
+
+### Model Approach
+We are aiming to build a multiclass convolutional neural network (CNN) to be able to capture whether a given map belongs to one of three classes: 
+
+- (R) "Gerrymander for Republicans" - swing >= 0.05
+- (NC) "No Change" - -0.05 > swing < 0.05
+- (D) "Gerrymander for Democrats" - -0.05 <= swing
+
+We will use accuracy as our primary metric in understanding what proportion of the model's predictions is accurate. If we see high class imbalances, we will instead focus on using precision and recall to understand how well our model performs.
+
+#### Data Augmentation
+Since we predict that our dataset size will be quite small, our data will be augmented through an ImageDataGenerator. To do this, we will perform two types of augmentation: flipping, and rotation.
+
+I've refrained from conducting other types of augmentation (shearing, scaling, stretching, [etc.](https://sander.ai/2015/03/17/plankton.html)) as I wanted to preserve spatial relationships between districts (especially the differences between redistricting).
+
+![Image 1](img/ex_augmented_photo_0_3523.png)
+![Image 2](img/ex_augmented_photo_0_9682.png)
+
+#### Data Challenges
+We will use a 70/30 split for our data to make enough data available for testing, since our dataset is quite small. Within the training data, we will take a 80/20 split for validation to be able to track changes of our models through epochs.
+
+We can correct for class imbalances through various methods (outlined by Buda et. al., 2017 [here](https://arxiv.org/pdf/1710.05381)).
+
+The classic undersampling of majority class may lead to issues as our dataset should be quite small. 
+
+Instead, we can choose to oversample from minority classes (ideally with augmented images). We can also choose to adjust the class weights for cost-sensitive learning to penalise minority misclassification at a higher level, forcing the model to better adjust for errors in minority classes. 
+
+#### Model Approach 
+1. We will start by building a baseline model that contains 1 input layer, 1 hidden CNN layer, and a dense layer, before a final dense layer that uses softmax to make multiclass classifications. The goal is to understand how well a basic model can make predictions, and set a baseline metric to improve upon.
+
+2. We will then try to optimize our approach by tuning parameters such as convolution window, activation function, stride size, batch_size, and epochs. 
+
+3. After finding the ideal parameters, we can improve the complexity of the model by introducing more kernels, more layers, or more advanced model architecture, until we reached our ideal performance level.
+
+4. We can perform regularization on overfitted data by introducing dropout layers to ensure our model is more generalizable, and introduce early stopping to prevent our data from learning too much from training data.
+
+#### Underfitting
+If we encounter underfitting, we will increase the complexity of our model.
+
+#### Overfitting
+If we encounter overfitting (generally when training error is much lower than test error), we can introduce dropout layers to randomly mask nodes during training to prevent the output from overlearning noise within training data, as well as early stopping when training error diverges from testing error to stop the output from learning specific trends only in training data.
+
+
+## Results
+All of our results followed the same trends as this graph (showing metrics during training over epochs):
+![model_2.png](img/model_2_output.png)
+
+Accuracy scores tended to hover around 33% (essentially random guessing with 1/3 chance), and our precision and recall scores plummeted almost immediately (indicating our model being unable to guess right from wrong).
+
+Our performance did not improve over epochs, overall suggesting **heavy underfitting** (despite increasing the complexity of our model + trying different types of improvements to our model architecture/parameters). It is most likely a mixture of non-ideal model architecture, untuned hyperparameters, and a very difficult task (particularly on my local machine). 
+
+### Takeaways
+There are some takeaways/findings from the experience:
+1. **None of the parameters does not seem to matter.** The models seem to pick up on red herrings/other patterns and are unable to capture the nuance behind gerrymandering, despite introducing more complexity into the model (as much as my local machine can take - cloud computing would help in this regard.)
+2. Training on nuanced trends within maps may be **incredibly difficult for a CNN** - it may require more complex types of convolution models to pick up necessary 
+3. My **sample size is too small, despite image augmentation.** This makes it easy to overfit across the small sample size (my models did not get to this stage regularly - I could not fit my model to any trends in the maps). To improve this, we would require either fake maps that have calculated voting (which may differ to real life), or to get maps that go further back in time.
 
 
 ## Data Sources
@@ -69,11 +128,21 @@ Our goal is to train a convolutional neural network (CNN) to predict the margin 
 
 - United States Congressional District Shapefiles, 2024: [U.S. Department of Transportation](https://geodata.bts.gov/datasets/8ef43e55f7524f02a0ecb3dd415caf33/explore?location=33.644581%2C163.934541%2C1.85)
 
+- United States Congressional District Shapefiles, 2020: [Daily Kos](https://docs.google.com/spreadsheets/d/1LrBXlqrtSZwyYOkpEEXFwQggvtR0bHHTxs9kq4kjOjw/edit#gid=0)
+
 - United States Historical City Populations, 1790-2010: [Stanford Spatial History Project - Erik Steiner, Jason A. Heppler](https://github.com/cestastanford/historical-us-city-populations/tree/master)
 
-## Future Improvements
+- United States Historical City Populations, 2020: [ArcGIS](https://hub.arcgis.com/datasets/esri::usa-major-cities/explore)
+
+
+## Suggested Improvements
 - Data quality for election data by congressional districts are surprisingly poor. I have tried my best to source accurate data. A more concerted effort through an effort of web scraping/data sourcing may yield more accurate results.
 
 - Other (more advanced) metrics have been created for to quantify partisan gerrymandering from legal ([Stanford Law Review](https://www.stanfordlawreview.org/print/article/three-tests-for-practical-evaluation-of-partisan-gerrymandering/)) and statistical ([Wang, 2016](https://web.math.princeton.edu/~sswang/wang16_ElectionLawJournal_gerrymandering-MD-WI_.pdf), [Princeton Gerrymandering Project](https://gerrymander.princeton.edu/)) standpoints. These metrics may be used to substitute/complement the efficiency gap metric in measuring how and to what extent gerrymandering plays a part in presidential elections.
 
 - There have been attempts (e.g. [BDistricting](https://bdistricting.com/2010/)) to create more equal (or [hilarious](https://fakeisthenewreal.org/random-states-of-america/)) redistricting maps that aim to reduce gerrymandering - we can take hypothetical districts and further improve our model (and create a larger sample size)
+
+- Other approaches to algorithmically detect gerrymandering have been tried in the past (e.g. [Computational Method for Identifying Extreme Redistricting Plans - Prof Wendy Tam Cho](https://www.youtube.com/watch?v=gRCZR_BbjTo&ab_channel=Vox)) - we can apply deep learning to augment/improve one or more of these approaches
+
+## Future Developments 
+- Building a front-end (a Streamlit app, Dash app, or a full-fledged stack) can be useful in creating intuition behind gerrymandering, while letting others explore the history and potential of this political tool. 
