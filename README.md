@@ -6,7 +6,7 @@
 
 All 50 states redrew congressional voting districts in 2021. How will nationwide redistricting efforts affect the presidential election in 2024? 
 
-[Project Final Presentation](MLPA_Final_Project_Presentation_Toby_Chiu.pptx)
+[Project Final Presentation](MLPA_Final_Project_Presentation_Toby_Chiu.pdf)
 
 ## Technical Goal
 
