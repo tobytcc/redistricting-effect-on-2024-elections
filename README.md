@@ -53,13 +53,12 @@ Our goal is to train a convolutional neural network (CNN) to predict the margin 
 
 3. Turn maps into standardized pictures - features should be geoencoded into maps. [Code - Heading Step 3](map_preprocessing.ipynb)
 
-![Example CNN Input Map](img/example_cnn_image.png)
-
 4. Train a classification convolutional neural network (CNN) with accuracy as our primary loss function - goal is to predict presence of gerrymandering. [Code](model.ipynb)
 
-5. Make predictions on updated maps of 2024 districts. [Code](predictions.ipynb)
+5. Correct for underfitting/overfitting by tuning model.
 
-6. Calculate expected swings to find how the 2024 US Presidential Elections will be affected by gerrymandering. 
+6. Make predictions on updated maps of 2024 districts. [Code](predictions.ipynb)
+
 
 ### Assumptions
 Our model trains using data from statewide elections (for the House of Representatives) as opposed to presidential elections. A large assumption is that these statewide election patterns transfer over to presidential elections - [not necessarily true but close enough](http://mike.teczno.com/notes/redistricting/measuring-efficiency-gap.html).
@@ -86,7 +85,7 @@ Since we predict that our dataset size will be quite small, our data will be aug
 
 I've refrained from conducting other types of augmentation (shearing, scaling, stretching, [etc.](https://sander.ai/2015/03/17/plankton.html)) as I wanted to preserve spatial relationships between districts (especially the differences between redistricting).
 
-![Image 1](img/ex_augmented_photo_0_3523.png)
+![Example CNN Input Map](img/example_cnn_image.png)
 ![Image 2](img/ex_augmented_photo_0_9682.png)
 
 #### Data Challenges
@@ -122,7 +121,7 @@ Accuracy scores tended to hover around 33% (essentially random guessing with 1/3
 
 Our performance did not improve over epochs, overall suggesting **heavy underfitting** (despite increasing the complexity of our model + trying different types of improvements to our model architecture/parameters). It is most likely a mixture of non-ideal model architecture, untuned hyperparameters, and a very difficult task (particularly on my local machine). 
 
-Our model predicted **36 Democratic gerrymandered states** and **7 states with no change** for the 2021 redistricting case - this is a sign of a poor-performing model - all 3 probabilities from softmax are incredibly close, indicating a difficulty in seperating between all 3 classes.
+Our model predicted **36 Democratic gerrymandered states**, **7 states with no change**, and **0 Republican gerrymandered states** for the 2021 redistricting case; this would theoretically indicate a landslide win for Biden (by at least 72 votes if every gerrymandered state flipped 1 state), which would obviously be untrue. This is a sign of a poor-performing model - all 3 probabilities from softmax are incredibly close, indicating a difficulty in seperating between all 3 classes.
 
 ### Takeaways
 There are some takeaways/findings from the experience:
